@@ -13,7 +13,7 @@ function Carousel(props) {
     const itemContainerRef = useRef(null);
     const listItemRef = useRef(null);
     
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(1);
     const [itemWidth, setItemWidth] = useState(0);
 
     useEffect(() => {
@@ -34,18 +34,29 @@ function Carousel(props) {
         const direction = e.target.closest('button').dataset.direction 
         switch(direction) {
             case 'previous':
+                    if (activeIndex - 1 === 0) {
+                        itemContainerRef.current.style.height = imageRef.current.getBoundingClientRect().height + 'px';
+                        setTimeout(() => {
+                            itemContainerRef.current.classList.remove('translate--transition');
+                            setActiveIndex(props.images.length);
+                        }, 400);
+
+                        setTimeout(() => {
+                            itemContainerRef.current.classList.add('translate--transition');
+                        }, 410);
+                    }
                     setActiveIndex(activeIndex - 1);
                 break;
             case 'next':
                     if (!imageRef.current) return;
-                    if (activeIndex + 1 > props.images.length - 1) {
+                    if (activeIndex + 1 > props.images.length) {
                         itemContainerRef.current.style.height = imageRef.current.getBoundingClientRect().height + 'px';
                         setTimeout(() => {
                             itemContainerRef.current.classList.remove('translate--transition');
-                            setActiveIndex(0);
+                            setActiveIndex(1);
                         }, 400)
                         setTimeout(() => {
-                            itemContainerRef.current.classList.add('translate--transition')
+                            itemContainerRef.current.classList.add('translate--transition');
                         }, 410);
                     }
                     setActiveIndex(activeIndex + 1);
@@ -63,25 +74,28 @@ function Carousel(props) {
         setDimensions();
     }, [activeIndex])
 
+    useEffect(() => {
+        const rect = imageRef.current.getBoundingClientRect();
+        setItemWidth(rect.width);
+        itemContainerRef.current.style.transform = `translateX(-${rect.width}px)`;
+    }, []);
+
     return (
         <div className="Carousel" ref={carouselRef}>
             <button
                 data-direction="previous"
                 className="navigation--button previous--button"
-                onClick={navigateCarousel}
-                disabled={activeIndex === 0}
-                >
+                onClick={navigateCarousel}>
                 <ChevronLeftIcon/>
             </button>
             <button 
                 data-direction="next"
                 className="navigation--button next--button ripple" 
-                onClick={navigateCarousel}
-                >
+                onClick={navigateCarousel}>
                 <ChevronRightIcon/>
             </button>
             <ul className="item--container translate--transition" ref={itemContainerRef}>
-                {[...props.images, props.images[0]].map((el, index) => (
+                {[props.images[props.images.length - 1], ...props.images, props.images[0]].map((el, index) => (
                     <li 
                         ref={index === activeIndex ? listItemRef : null}
                         key={index}
@@ -98,7 +112,7 @@ function Carousel(props) {
                 {props.images.map((el, index) => (
                     <button 
                         key={index}
-                        className={`${index === activeIndex ? 'active' : ''}`}
+                        className={`${index + 1 === activeIndex ? 'active' : ''}`}
                         onClick={() => setActiveIndex(index)}>
                         <span></span>
                     </button>

@@ -24,10 +24,6 @@ div.Carousel {
         &.next--button {
             right: 0;
         }
-        &[disabled] {
-            opacity: 0.4;
-            cursor: initial;
-        }
     }
 
     ul.item--container {
