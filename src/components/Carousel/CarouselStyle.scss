@@ -1,0 +1,78 @@
+div.Carousel {
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    max-width: 1400px;
+    margin: auto;
+    transition: height 250ms ease-in-out;
+
+    button.navigation--button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1;
+        background-color: transparent;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        svg {
+            font-size: 50px;
+        }
+        &.previous--button {
+            left: 0;
+        }
+        &.next--button {
+            right: 0;
+        }
+        &[disabled] {
+            opacity: 0.4;
+            cursor: initial;
+        }
+    }
+
+    ul.item--container {
+        display: block;
+        
+        li {
+            position: absolute;
+            width: 100%;
+            img {
+                height: auto;
+                width: 100%;
+            }
+        }
+        &.translate--transition {
+            transition: transform 400ms ease-in-out, height 350ms ease-in-out;
+        }
+    }
+
+    div.slideControls {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+
+        button {
+            width: 50px;
+            height: 25px;
+            padding: 0;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent;
+            margin-right: 10px;
+            border: none;
+            cursor: pointer;
+            &.active span {
+                opacity: 1;
+            }
+            span {
+                height: 3px;
+                border-radius: 2px;
+                min-width: 100%;
+                background-color: #fff;
+                opacity: 0.4;
+            }
+        }
+    }
+}
